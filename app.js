@@ -5,12 +5,25 @@ require("dotenv").config();
 const sortFeedback = require("./public/sentimentAnalysis");
 const cors = require("cors");
 const { CohereClientV2 } = require("cohere-ai");
+const Feedback = require("./models/Feedback.js");
+const mongoose = require("mongoose");
 const cohere = new CohereClientV2({
   token: process.env.API_KEY,
 });
 
 const app = express();
 const port = 5000;
+
+mongoose.connect("mongodb://localhost:27017/feedbackApp", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+db.once("open", () => {
+  console.log("Connected to MongoDB");
+});
 
 app.use(bodyParser.json());
 app.use(express.json());
@@ -59,6 +72,18 @@ app.post("/analyze-feedback", (req, res) => {
   } catch (error) {
     console.error("Error in /analyze-feedback:", error);
     res.status(500).json({ error: "Failed to analyze feedback" });
+  }
+});
+
+app.post("/save-feedback", async (req, res) => {
+  try {
+    const { text, score, sentiment, constructive } = req.body;
+    const newFeedback = new Feedback({ text, score, sentiment, constructive });
+    await newFeedback.save();
+    res.status(201).json({ message: "Feedback saved successfully" });
+  } catch (error) {
+    console.error("Error saving feedback:", error);
+    res.status(500).json({ error: "Failed to save feedback" });
   }
 });
 

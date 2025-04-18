@@ -19,6 +19,15 @@ function Sentiment() {
 
       const result = await response.json();
       setAnalysis(result);
+      for (let feedback of result) {
+        await fetch("http://localhost:5000/save-feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(feedback), // Send the entire feedback object
+        });
+      }
     } catch (error) {
       console.error("Error analyzing feedback:", error);
     }
