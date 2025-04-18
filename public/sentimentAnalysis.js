@@ -10,6 +10,7 @@ const sortFeedback = (feedbacks) => {
       improve: -3,
       design: 0,
       colors: 0,
+      bad: 1,
     },
   };
 

@@ -6,7 +6,7 @@ const sortFeedback = require("./public/sentimentAnalysis");
 const cors = require("cors");
 const { CohereClientV2 } = require("cohere-ai");
 const cohere = new CohereClientV2({
-  token: "22MznrbdTU2k2xTExNR7IcvSb4XmRPOXPDNlc9Tu",
+  token: process.env.API_KEY,
 });
 
 const app = express();
@@ -26,28 +26,40 @@ app.get("/analyse", (req, res) => {
 });
 
 app.post("/generate-mail", async (req, res) => {
-  const { feedbacks } = req.body;
-  const response = await cohere.chat({
-    model: "command-a-03-2025",
-    messages: [
-      {
-        role: "user",
-        content: `Write a short email responding to the following feedback analysis: ${JSON.stringify(
-          feedbacks
-        )}`,
-      },
-    ],
-  });
-  const emailResponse = {
-    message: response.message.content[0].text,
-  };
-  res.json([emailResponse]);
+  try {
+    const { feedbacks } = req.body;
+    const response = await cohere.chat({
+      model: "command-a-03-2025",
+      messages: [
+        {
+          role: "user",
+          content: `Write a short email responding to the following feedback analysis: ${JSON.stringify(
+            feedbacks
+          )}`,
+        },
+      ],
+    });
+
+    const emailResponse = {
+      message: response.message.content[0].text,
+    };
+    res.json([emailResponse]);
+  } catch (error) {
+    console.error("Error in /generate-mail:", error);
+    res.status(500).json({ error: "Failed to generate email" });
+  }
 });
 
 app.post("/analyze-feedback", (req, res) => {
-  const { feedbacks } = req.body;
-  let result = sortFeedback(feedbacks);
-  res.json(result);
+  try {
+    const { feedbacks } = req.body;
+
+    let result = sortFeedback(feedbacks);
+    res.json(result);
+  } catch (error) {
+    console.error("Error in /analyze-feedback:", error);
+    res.status(500).json({ error: "Failed to analyze feedback" });
+  }
 });
 
 app.listen(port, () => {
