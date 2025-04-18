@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Sentiment() {
   const [feedbacks, setFeedbacks] = useState([]);
   const [analysis, setAnalysis] = useState([]);
-  const [email, setEmails] = useState([]);
+  const [storedFeedbacks, setStoredFeedbacks] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,34 +19,63 @@ function Sentiment() {
 
       const result = await response.json();
       setAnalysis(result);
+
       for (let feedback of result) {
         await fetch("http://localhost:5000/save-feedback", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(feedback), // Send the entire feedback object
+          body: JSON.stringify(feedback),
         });
       }
-    } catch (error) {
-      console.error("Error analyzing feedback:", error);
-    }
 
+      fetchStoredFeedbacks();
+    } catch (error) {
+      console.error("Error processing feedback:", error);
+    }
+  };
+
+  const fetchStoredFeedbacks = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/get-feedbacks");
+      const data = await response.json();
+      setStoredFeedbacks(data);
+    } catch (error) {
+      console.error("Error fetching stored feedbacks:", error);
+    }
+  };
+
+  const handleGenerateMail = async (id, feedback) => {
     try {
       const response = await fetch("http://localhost:5000/generate-mail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ feedbacks }),
+        body: JSON.stringify({ feedbacks: [feedback] }),
       });
 
-      const result2 = await response.json();
-      setEmails(result2);
+      const result = await response.json();
+      const emailResponse = result[0]?.message || "No email generated";
+
+      await fetch("http://localhost:5000/update-feedback-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, emailResponse }),
+      });
+
+      fetchStoredFeedbacks();
     } catch (error) {
-      console.error("Error generating email", error);
+      console.error("Error generating email:", error);
     }
   };
+
+  useEffect(() => {
+    fetchStoredFeedbacks();
+  }, []);
 
   return (
     <div>
@@ -59,31 +88,30 @@ function Sentiment() {
         <button type="submit">Analyze</button>
       </form>
       <div>
-        <h2>Analysis Results:</h2>
-        {analysis.map((result, index) => (
-          <div key={index}>
+        <h2>Stored Feedbacks:</h2>
+        {storedFeedbacks.map((feedback) => (
+          <div key={feedback._id}>
             <p>
-              <strong>Text:</strong> {result.text}
+              <strong>Text:</strong> {feedback.text}
             </p>
             <p>
-              <strong>Score:</strong> {result.score}
+              <strong>Score:</strong> {feedback.score}
             </p>
             <p>
-              <strong>Sentiment:</strong> {result.sentiment}
+              <strong>Sentiment:</strong> {feedback.sentiment}
             </p>
             <p>
-              <strong>Constructive Criticism:</strong> {result.constructive}
+              <strong>Constructive:</strong> {feedback.constructive}
             </p>
-          </div>
-        ))}
-      </div>
-      <div>
-        <h2>Email: </h2>
-        {email.map((result2, index) => (
-          <div key={index}>
             <p>
-              <strong>Text:</strong> {result2.message}
+              <strong>Email:</strong>{" "}
+              {feedback.emailResponse || "No email generated yet"}
             </p>
+            <button
+              onClick={() => handleGenerateMail(feedback._id, feedback.text)}
+            >
+              Generate Mail
+            </button>
           </div>
         ))}
       </div>

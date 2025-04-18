@@ -38,6 +38,16 @@ app.get("/analyse", (req, res) => {
   );
 });
 
+app.get("/get-feedbacks", async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find();
+    res.json(feedbacks);
+  } catch (error) {
+    console.error("Error retrieving feedbacks:", error);
+    res.status(500).json({ error: "Failed to retrieve feedbacks" });
+  }
+});
+
 app.post("/generate-mail", async (req, res) => {
   try {
     const { feedbacks } = req.body;
@@ -84,6 +94,38 @@ app.post("/save-feedback", async (req, res) => {
   } catch (error) {
     console.error("Error saving feedback:", error);
     res.status(500).json({ error: "Failed to save feedback" });
+  }
+});
+
+app.post("/update-feedback-email", async (req, res) => {
+  try {
+    const { id, emailResponse } = req.body;
+    const updatedFeedback = await Feedback.findByIdAndUpdate(
+      id,
+      { emailResponse },
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ message: "Email updated successfully", updatedFeedback });
+  } catch (error) {
+    console.error("Error updating feedback email:", error);
+    res.status(500).json({ error: "Failed to update feedback email" });
+  }
+});
+
+app.delete("/delete-feedback/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log(id);
+    const deletedFeedback = await Feedback.findByIdAndDelete(id);
+    if (!deletedFeedback) {
+      return res.status(404).json({ error: "Feedback not found" });
+    }
+    res.status(200).json({ message: "Feedback deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting feedback:", error);
+    res.status(500).json({ error: "Failed to delete feedback" });
   }
 });
 

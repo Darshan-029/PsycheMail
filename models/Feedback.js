@@ -5,6 +5,7 @@ const feedbackSchema = new mongoose.Schema({
   score: { type: Number, required: true },
   sentiment: { type: String, required: true },
   constructive: { type: String, required: true },
+  emailResponse: { type: String },
 });
 
 const Feedback = mongoose.model("Feedback", feedbackSchema);
