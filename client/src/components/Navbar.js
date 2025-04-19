@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import ThemeToggle from "./ThemeToggle";
 import { useNavigate } from "react-router-dom";
+import Logo from "../assets/Logonew.png";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -36,14 +36,7 @@ const Navbar = () => {
           alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <h1
-            className="text-gradient"
-            style={{ fontSize: "1.8rem", margin: 0 }}
-          >
-            InScribe AI
-          </h1>
-        </div>
+        <img src={Logo} alt="PsycheMail" style={{ width: "120px" }} />
 
         <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
           {!isMobile && (
@@ -66,7 +59,6 @@ const Navbar = () => {
           {!isMobile && (
             <button
               className="btn btn-primary"
-              href="/signup"
               onClick={() => navigate("/signup")}
             >
               Get Started
@@ -145,7 +137,6 @@ const Navbar = () => {
             Smart Email
           </a>
           <button
-            href="/signup"
             className="btn btn-primary"
             style={{ marginTop: "0.5rem" }}
             onClick={() => navigate("/signup")}

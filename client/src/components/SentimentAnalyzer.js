@@ -5,6 +5,12 @@ const SentimentAnalyzer = () => {
   const [feedbacks, setFeedbacks] = useState([]);
   const [analysis, setAnalysis] = useState([]);
   const [storedFeedbacks, setStoredFeedbacks] = useState([]);
+  const [isTouched, setIsTouched] = useState(false);
+  const [text, setText] = useState("");
+  const [sentiment, setSentiment] = useState(null);
+  const [score, setScore] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [shouldShake, setShouldShake] = useState(false);
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
@@ -97,13 +103,13 @@ const SentimentAnalyzer = () => {
     fetchStoredFeedbacks();
   }, []);
 
-  const [text, setText] = useState("");
-  const [sentiment, setSentiment] = useState(null);
-  const [score, setScore] = useState(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-
   const analyzeSentiment = () => {
-    if (!text.trim()) return;
+    if (!text.trim()) {
+      setIsTouched(true);
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+      return;
+    }
 
     setIsAnalyzing(true);
 
@@ -182,20 +188,29 @@ const SentimentAnalyzer = () => {
       <h2 style={{ marginBottom: "20px" }}>Sentiment Analyzer</h2>
 
       <div>
-        <textarea
-          value={text}
-          onChange={(e) => {
-            setFeedbacks(e.target.value.split(","));
-            setText(e.target.value);
-          }}
-          placeholder="Enter text to analyze sentiment..."
-          style={{
-            height: "150px",
-            resize: "vertical",
-            width: "100%",
-            padding: "15px",
-          }}
-        />
+        <div>
+          <textarea
+            className={`${
+              isTouched && !text.trim() ? "form-control-error" : ""
+            } ${shouldShake ? "shake" : ""}`}
+            value={text}
+            onChange={(e) => {
+              setFeedbacks(e.target.value.split(","));
+              setText(e.target.value);
+            }}
+            placeholder="Enter text to analyze sentiment..."
+            style={{
+              height: "150px",
+              resize: "vertical",
+              width: "100%",
+              padding: "15px",
+            }}
+            onBlur={() => setIsTouched(true)}
+          />
+          {isTouched && !text.trim() && (
+            <div className="error-text">*This field is required</div>
+          )}
+        </div>
 
         <button
           className="btn btn-primary"

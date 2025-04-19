@@ -16,7 +16,7 @@ const AboutUs = () => {
         </h2>
 
         <p>
-          <strong>InScribe AI</strong> was built with the vision of enhancing
+          <strong>PsycheMail</strong> was built with the vision of enhancing
           productivity and customer communication using the power of Generative
           AI. Our tool empowers businesses to instantly understand the tone of
           customer feedback and respond with intelligent, context-aware emails —
@@ -41,13 +41,14 @@ const AboutUs = () => {
             <strong>Mustafa Malak</strong> – Frontend Developer & UI Designer
           </li>
           <li>
-            <strong>Dev 2</strong> – Frontend Integration & Theme Toggle
+            <strong>Anas Khan</strong> – Frontend Integration & Theme Toggle
           </li>
           <li>
-            <strong>Dev 3</strong> – Backend APIs & Sentiment Engine
+            <strong>Darshan Choudhary</strong> – Backend APIs & Sentiment Engine
           </li>
           <li>
-            <strong>Dev 4</strong> – Smart Email Generator & Deployment
+            <strong>Darpan Choudhary</strong> – Smart Email Generator &
+            Deployment
           </li>
         </ul>
 
@@ -59,7 +60,7 @@ const AboutUs = () => {
 
         <h3 style={{ marginTop: "30px" }}>🤝 Connect With Us</h3>
         <p>
-          Reach out at <em>ByteMeTeam@inscribe.dev</em> or follow us on social
+          Reach out at <em>ByteMeTeam@PsycheMail.dev</em> or follow us on social
           media for updates and open-source releases.
         </p>
       </div>

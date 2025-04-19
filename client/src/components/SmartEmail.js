@@ -9,6 +9,9 @@ const SmartEmail = () => {
   const [analysis, setAnalysis] = useState("");
   const [feedbacks, setFeedbacks] = useState([]);
   const [email, setEmail] = useState("Start");
+  const [isTouched, setIsTouched] = useState(false);
+  const [shouldShake, setShouldShake] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
@@ -60,13 +63,18 @@ const SmartEmail = () => {
   }, [email]);
 
   const generateEmail = (emailResponse) => {
-    if (!emailContent.trim()) return;
+    if (!emailContent.trim()) {
+      setError(true);
+      setIsTouched(true);
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+      return;
+    }
 
     setIsGenerating(true);
 
     setTimeout(() => {
-      // Generate response based on sentiment and category
-      let responseBody = `Dear Customer,\n\nYou wrote:\n"${emailContent}"\n\n${emailResponse}\n\nRegards,\nThe InScribe AI Team`;
+      let responseBody = `Dear Customer,\n\nYou wrote:\n"${emailContent}"\n\n${emailResponse}\n\nRegards,\nThe PsycheMail AI Team`;
 
       setGeneratedEmail({
         subject: "Response to your message",
@@ -77,6 +85,14 @@ const SmartEmail = () => {
 
       setIsGenerating(false);
     }, 1500);
+  };
+
+  const handleBlur = () => {
+    setIsTouched(true);
+    if (!emailContent.trim()) {
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 500);
+    }
   };
 
   return (
@@ -109,12 +125,19 @@ const SmartEmail = () => {
               const combinedFeedback = `${subject} ${e.target.value}`.trim();
               setFeedbacks([combinedFeedback]);
             }}
+            onBlur={handleBlur}
             placeholder="Enter customer message to generate a response..."
             style={{
               height: "120px",
               resize: "vertical",
             }}
+            className={`${
+              isTouched && !emailContent.trim() ? "form-control-error" : ""
+            } ${shouldShake ? "shake" : ""}`}
           />
+          {isTouched && !emailContent.trim() && (
+            <div className="error-text">This field is required</div>
+          )}
         </div>
 
         <div>

@@ -140,6 +140,7 @@ const Hero = () => {
           marginLeft: "90px",
           padding: "40px 20px",
           position: "relative",
+          minHeight: "420px",
         }}
       >
         {/* 3D Element */}
@@ -171,12 +172,12 @@ const Hero = () => {
               lineHeight: 1.6,
             }}
           >
-            InScribe AI analyzes sentiment from user feedback and generates
+            PsycheMail analyzes sentiment from user feedback and generates
             intelligent email responses. Save time, ensure consistency, and
             never miss the emotional tone of your communications.
           </p>
           <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-            <button className="btn btn-primary">Try InScribe AI Now</button>
+            <button className="btn btn-primary">Try PsycheMail Now</button>
             <button className="btn btn-secondary">See How It Works</button>
           </div>
           <div
@@ -191,7 +192,7 @@ const Hero = () => {
             <div
               style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             >
-              <div className="tag tag-Positive">Positive</div>
+              <div className="tag tag-positive">Positive</div>
               <span>AI Sentiment</span>
             </div>
             <div

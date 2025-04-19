@@ -8,7 +8,6 @@ const Dashboard = () => {
       <Navbar />
       <div className="glass-card" style={{ padding: "40px" }}>
         <h2 className="text-gradient">Dashboard</h2>
-        <p>Coming soon: data visualizations, charts, sentiment logs!</p>
         <Graph />
       </div>
       <Footer />

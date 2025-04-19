@@ -15,11 +15,11 @@ const PrivacyPolicy = () => {
           Privacy Policy
         </h2>
         <p>
-          <strong>Last updated:</strong> April 18, 2025
+          <strong>Last updated:</strong> April 19, 2025
         </p>
 
         <p style={{ marginBottom: "20px" }}>
-          Welcome to <strong>InScribe AI</strong>, your smart assistant for
+          Welcome to <strong>PsycheMail</strong>, your smart assistant for
           AI-powered sentiment analysis and email generation. This Privacy
           Policy outlines how we collect, use, and protect your information when
           you use our platform.

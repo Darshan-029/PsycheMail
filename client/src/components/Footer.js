@@ -16,7 +16,7 @@ const Footer = () => {
             className="text-gradient"
             style={{ fontSize: "1.5rem", marginBottom: "20px" }}
           >
-            InScribe AI
+            PsycheMail
           </h3>
 
           <div
@@ -149,7 +149,7 @@ const Footer = () => {
 
           <div style={{ opacity: 0.7, fontSize: "0.9rem" }}>
             <p>
-              &copy; {new Date().getFullYear()} InScribe AI. Made by Team ByteMe
+              &copy; {new Date().getFullYear()} PsycheMail. Made by Team ByteMe
               ✨ - All rights reserved.
             </p>
             <p style={{ marginTop: "5px" }}>
