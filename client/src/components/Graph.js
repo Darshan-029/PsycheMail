@@ -51,23 +51,32 @@ const App = () => {
       }}
     >
       <h2>Live Feedback Sentiment</h2>
-      <PieChart width={600} height={400} margin={3}>
-        <Pie
-          data={chartData}
-          dataKey="value"
-          nameKey="name"
-          cx="50%"
-          cy="50%"
-          outerRadius={150}
-          label
-        >
-          {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index]} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
+      {feedbackCounts.positive === 0 &&
+      feedbackCounts.negative === 0 &&
+      feedbackCounts.neutral === 0 ? (
+        <div style={{ margin: "1rem", color: "#a9a6ff" }}>
+          <h1>No Data Found..</h1>
+        </div>
+      ) : (
+        <PieChart width={600} height={400} margin={3}>
+          <Pie
+            data={chartData}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            outerRadius={150}
+            label
+          >
+            {chartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index]} />
+            ))}
+          </Pie>
+          <Tooltip />
+          <Legend />
+        </PieChart>
+      )}
+
       <button
         className={"btn btn-primary"}
         style={{ marginTop: "1rem" }}
