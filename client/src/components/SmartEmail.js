@@ -6,12 +6,13 @@ const SmartEmail = () => {
   const [category, setCategory] = useState("informative");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedEmail, setGeneratedEmail] = useState(null);
-  const [analysis, setAnalysis] = useState([]);
+  const [analysis, setAnalysis] = useState("");
   const [feedbacks, setFeedbacks] = useState([]);
   const [email, setEmail] = useState("Start");
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
+    console.log(feedbacks);
 
     try {
       const response = await fetch("http://localhost:5000/analyze-feedback", {
@@ -19,31 +20,38 @@ const SmartEmail = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ feedbacks }),
+        body: JSON.stringify({ feedbacks: feedbacks }),
       });
 
       const result = await response.json();
-      setAnalysis(result);
+      setAnalysis(result[0].text);
+      console.log(result[0].text);
+      return result[0].text;
     } catch (error) {
       console.error("Error processing feedback:", error);
+      return "";
     }
   };
 
-  const handleGenerateMail = async (feedback) => {
+  const handleGenerateMail = async (analysisResult) => {
+    console.log(analysis);
     try {
       const response = await fetch("http://localhost:5000/generate-mail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ feedbacks: [feedback] }),
+        body: JSON.stringify({ feedbacks: analysisResult }),
       });
 
       const result = await response.json();
       const emailResponse = result[0]?.message || "No email generated";
       setEmail(emailResponse);
+      console.log(email);
+      return emailResponse;
     } catch (error) {
       console.error("Error generating email:", error);
+      return "No email generated";
     }
   };
 
@@ -51,93 +59,19 @@ const SmartEmail = () => {
     console.log("Updated email:", email);
   }, [email]);
 
-  const generateEmail = () => {
+  const generateEmail = (emailResponse) => {
     if (!emailContent.trim()) return;
 
     setIsGenerating(true);
 
-    // Simulate AI generation (would be replaced by API call)
     setTimeout(() => {
-      // Detect sentiment
-      const lowerText = emailContent.toLowerCase();
-      let sentiment = "neutral";
-
-      const positiveWords = [
-        "love",
-        "great",
-        "excellent",
-        "amazing",
-        "good",
-        "happy",
-        "best",
-        "wonderful",
-        "fantastic",
-      ];
-      const negativeWords = [
-        "hate",
-        "terrible",
-        "awful",
-        "bad",
-        "worst",
-        "disappointing",
-        "horrible",
-        "poor",
-        "angry",
-      ];
-
-      let positiveCount = 0;
-      let negativeCount = 0;
-
-      // Count positive and negative words
-      positiveWords.forEach((word) => {
-        const regex = new RegExp(`\\b${word}\\b`, "g");
-        const matches = lowerText.match(regex);
-        if (matches) positiveCount += matches.length;
-      });
-
-      negativeWords.forEach((word) => {
-        const regex = new RegExp(`\\b${word}\\b`, "g");
-        const matches = lowerText.match(regex);
-        if (matches) negativeCount += matches.length;
-      });
-
-      // Calculate sentiment
-      if (positiveCount > negativeCount) {
-        sentiment = "positive";
-      } else if (negativeCount > positiveCount) {
-        sentiment = "negative";
-      } else {
-        sentiment = "neutral";
-      }
-
       // Generate response based on sentiment and category
-      let responseSubject = "";
-      let responseBody = "";
-
-      if (subject) {
-        responseSubject = `Re: ${subject}`;
-      } else {
-        if (sentiment === "positive") {
-          responseSubject = "Thank you for your positive feedback";
-        } else if (sentiment === "negative") {
-          responseSubject = "Regarding your concerns";
-        } else {
-          responseSubject = "Response to your message";
-        }
-      }
-
-      if (sentiment === "positive") {
-        responseBody = `Dear Customer,\n\nThank you for your positive message. We're delighted to hear that you had a great experience.\n\nYou wrote:\n"${emailContent}"\n\n${email}\n\nWe appreciate your kind words and look forward to continuing to exceed your expectations.\n\nBest regards,\nThe InScribe AI Team`;
-      } else if (sentiment === "negative") {
-        responseBody = `Dear Customer,\n\nThank you for sharing your concerns with us. We're sorry to hear about your experience.\n\nYou wrote:\n"${emailContent}"\n\n${email}\n\nWe take your feedback seriously and would like to address these issues promptly. Please let us know how we can improve your experience.\n\nSincerely,\nThe InScribe AI Team`;
-      } else {
-        responseBody = `Dear Customer,\n\nThank you for your message. We appreciate you taking the time to reach out to us.\n\nYou wrote:\n"${emailContent}"\n\n${email}\n\nIf you have any further questions or need additional assistance, please don't hesitate to contact us.\n\nRegards,\nThe InScribe AI Team`;
-      }
+      let responseBody = `Dear Customer,\n\nYou wrote:\n"${emailContent}"\n\n${emailResponse}\n\nRegards,\nThe InScribe AI Team`;
 
       setGeneratedEmail({
-        subject: responseSubject,
+        subject: "Response to your message",
         body: responseBody,
-        sentiment,
+        sentiment: "neutral",
         category,
       });
 
@@ -159,7 +93,6 @@ const SmartEmail = () => {
             value={subject}
             onChange={(e) => {
               setSubject(e.target.value);
-              setFeedbacks(e.target.value.split(","));
             }}
             placeholder="Email subject"
           />
@@ -171,7 +104,11 @@ const SmartEmail = () => {
           </label>
           <textarea
             value={emailContent}
-            onChange={(e) => setEmailContent(e.target.value)}
+            onChange={(e) => {
+              setEmailContent(e.target.value);
+              const combinedFeedback = `${subject} ${e.target.value}`.trim();
+              setFeedbacks([combinedFeedback]);
+            }}
             placeholder="Enter customer message to generate a response..."
             style={{
               height: "120px",
@@ -197,9 +134,9 @@ const SmartEmail = () => {
         <button
           className="btn btn-primary"
           onClick={async () => {
-            await handleSubmit();
-            await handleGenerateMail(analysis.text);
-            generateEmail(email);
+            const analysisResult = await handleSubmit();
+            const emailResponse = await handleGenerateMail(analysisResult);
+            generateEmail(emailResponse);
           }}
           disabled={isGenerating || !emailContent.trim()}
         >

@@ -129,6 +129,28 @@ app.delete("/delete-feedback/:id", async (req, res) => {
   }
 });
 
+//dashboard
+app.get("/feedback-counts", async (req, res) => {
+  try {
+    console.log("Request received");
+
+    const feedbacksPositive = await Feedback.find({ sentiment: "Positive" });
+    const feedbacksNeutral = await Feedback.find({ sentiment: "Neutral" });
+    const feedbacksNegative = await Feedback.find({ sentiment: "Negative" });
+
+    const counts = {
+      positive: feedbacksPositive.length,
+      neutral: feedbacksNeutral.length,
+      negative: feedbacksNegative.length,
+    };
+
+    res.status(200).json(counts);
+  } catch (error) {
+    console.error("Error fetching feedback counts:", error);
+    res.status(500).json({ error: "Failed to fetch feedback counts" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`server is listening on port ${port}`);
 });
