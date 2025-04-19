@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-const COLORS = ["#06be77", "#7fddff", "#ff6347"];
+const COLORS = ["#06be77", "#ff6347", "#7fddff"];
 
 const App = () => {
   const [feedbackCounts, setFeedbackCounts] = useState({

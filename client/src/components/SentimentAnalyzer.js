@@ -239,6 +239,7 @@ const SentimentAnalyzer = () => {
                     flexDirection: "column",
                     marginBottom: "2rem",
                     justifyContent: "space-between",
+                    width: "100%",
                   }}
                 >
                   <div
@@ -343,13 +344,14 @@ const SentimentAnalyzer = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            padding: "0.5rem",
+            padding: "1rem",
             width: "33.3%",
             margin: "0.5rem",
             border: "0.5px solid white",
             borderRadius: "1.5rem",
             backgroundColor: "rgba(6, 190, 119, 0.1)",
             alignItems: "center",
+            overflowY: "scroll",
           }}
         >
           <h3>Positive Feedback</h3>
@@ -359,7 +361,7 @@ const SentimentAnalyzer = () => {
                 className={`tag tag-${feedback.sentiment}`}
                 style={{
                   width: "100%",
-                  marginBottom: "0.5rem",
+                  marginBottom: "0.8rem",
                   display: "flex",
                   justifyContent: "space-between",
                 }}
@@ -384,13 +386,14 @@ const SentimentAnalyzer = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            padding: "0.5rem",
+            padding: "1rem",
             width: "33.3%",
             margin: "0.5rem",
             border: "0.5px solid white",
             borderRadius: "1.5rem",
             backgroundColor: "rgba(127, 221, 255, 0.1)",
             alignItems: "center",
+            overflowY: "scroll",
           }}
         >
           <h3>Neutral Feedback</h3>
@@ -400,7 +403,7 @@ const SentimentAnalyzer = () => {
                 className={`tag tag-${feedback.sentiment}`}
                 style={{
                   width: "100%",
-                  marginBottom: "0.5rem",
+                  marginBottom: "0.8rem",
                   display: "flex",
                   justifyContent: "space-between",
                 }}
@@ -424,13 +427,14 @@ const SentimentAnalyzer = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            padding: "0.5rem",
+            padding: "1rem",
             width: "33.3%",
             margin: "0.5rem",
             border: "0.5px solid white",
             borderRadius: "1.5rem",
             backgroundColor: "rgba(255, 99, 71, 0.1)",
             alignItems: "center",
+            overflowY: "scroll",
           }}
         >
           <h3>Negative Feedback</h3>
@@ -440,7 +444,7 @@ const SentimentAnalyzer = () => {
                 className={`tag tag-${feedback.sentiment}`}
                 style={{
                   width: "100%",
-                  marginBottom: "0.5rem",
+                  marginBottom: "0.8rem",
                   display: "flex",
                   justifyContent: "space-between",
                 }}
