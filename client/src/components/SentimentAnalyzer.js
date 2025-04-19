@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const SentimentAnalyzer = () => {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -356,7 +357,12 @@ const SentimentAnalyzer = () => {
             feedback.sentiment === "Positive" ? (
               <div
                 className={`tag tag-${feedback.sentiment}`}
-                style={{ width: "100%", marginBottom: "0.5rem" }}
+                style={{
+                  width: "100%",
+                  marginBottom: "0.5rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
               >
                 <b>
                   "
@@ -364,6 +370,9 @@ const SentimentAnalyzer = () => {
                     feedback.text.slice(1)}{" "}
                   "
                 </b>
+                <CancelIcon
+                  onClick={() => handleDeleteFeedback(feedback._id)}
+                />
               </div>
             ) : (
               <div></div>
@@ -389,7 +398,12 @@ const SentimentAnalyzer = () => {
             feedback.sentiment === "Neutral" ? (
               <div
                 className={`tag tag-${feedback.sentiment}`}
-                style={{ width: "100%", marginBottom: "0.5rem" }}
+                style={{
+                  width: "100%",
+                  marginBottom: "0.5rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
               >
                 <b>
                   "
@@ -397,6 +411,9 @@ const SentimentAnalyzer = () => {
                     feedback.text.slice(1)}{" "}
                   "
                 </b>
+                <CancelIcon
+                  onClick={() => handleDeleteFeedback(feedback._id)}
+                />
               </div>
             ) : (
               <div></div>
@@ -421,7 +438,12 @@ const SentimentAnalyzer = () => {
             feedback.sentiment === "Negative" ? (
               <div
                 className={`tag tag-${feedback.sentiment}`}
-                style={{ width: "100%", marginBottom: "0.5rem" }}
+                style={{
+                  width: "100%",
+                  marginBottom: "0.5rem",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
               >
                 <b>
                   "
@@ -429,6 +451,9 @@ const SentimentAnalyzer = () => {
                     feedback.text.slice(1)}{" "}
                   "
                 </b>
+                <CancelIcon
+                  onClick={() => handleDeleteFeedback(feedback._id)}
+                />
               </div>
             ) : (
               <div></div>

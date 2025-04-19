@@ -132,7 +132,7 @@ const Hero = () => {
   }, [isDesktop]);
 
   return (
-    <div className="glass-card mb-4 main-card">
+    <div className="glass-card mb-4 main-card" style={{ margin: "auto" }}>
       <div
         style={{
           display: "flex",

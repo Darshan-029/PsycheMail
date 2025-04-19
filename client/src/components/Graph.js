@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-const COLORS = ["#00C49F", "#FF8042", "#8884d8"];
+const COLORS = ["#06be77", "#7fddff", "#ff6347"];
 
 const App = () => {
   const [feedbackCounts, setFeedbackCounts] = useState({
@@ -11,6 +11,7 @@ const App = () => {
   });
 
   const [chartData, setChartData] = useState([]);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
     const formatted = [
@@ -32,6 +33,13 @@ const App = () => {
       console.error("Error fetching feedback counts:", error);
     }
   };
+
+  useEffect(() => {
+    if (!hasFetched.current) {
+      fetchFeedbackCounts();
+      hasFetched.current = true;
+    }
+  }, []);
 
   return (
     <div
