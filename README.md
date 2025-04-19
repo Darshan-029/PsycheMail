@@ -1,1 +1,1 @@
-# Inscribe-AI
+# PsycheMail
