@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const SmartEmail = () => {
   const [subject, setSubject] = useState("");
   const [emailContent, setEmailContent] = useState("");
-  const [category, setCategory] = useState("informative");
+  const [category, setCategory] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedEmail, setGeneratedEmail] = useState(null);
   const [analysis, setAnalysis] = useState("");
@@ -12,6 +12,7 @@ const SmartEmail = () => {
   const [isTouched, setIsTouched] = useState(false);
   const [shouldShake, setShouldShake] = useState(false);
   const [error, setError] = useState(false);
+  const [language, setLanguage] = useState("English");
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
@@ -58,10 +59,6 @@ const SmartEmail = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("Updated email:", email);
-  }, [email]);
-
   const generateEmail = (emailResponse) => {
     if (!emailContent.trim()) {
       setError(true);
@@ -95,6 +92,12 @@ const SmartEmail = () => {
     }
   };
 
+  useEffect(() => {
+    const combinedFeedback =
+      `${subject} ${emailContent}. Give response in ${language} language and in ${category} tone.`.trim();
+    setFeedbacks([combinedFeedback]);
+  }, [subject, emailContent, language, category]);
+
   return (
     <div className="glass-card" style={{ padding: "30px" }}>
       <h2 style={{ marginBottom: "20px" }}>Smart Email Assistant</h2>
@@ -122,8 +125,6 @@ const SmartEmail = () => {
             value={emailContent}
             onChange={(e) => {
               setEmailContent(e.target.value);
-              const combinedFeedback = `${subject} ${e.target.value}`.trim();
-              setFeedbacks([combinedFeedback]);
             }}
             onBlur={handleBlur}
             placeholder="Enter customer message to generate a response..."
@@ -140,18 +141,65 @@ const SmartEmail = () => {
           )}
         </div>
 
-        <div>
-          <label style={{ display: "block", marginBottom: "5px" }}>
-            Category
-          </label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="urgent">Urgent</option>
-            <option value="informative">Informative</option>
-            <option value="promotional">Promotional</option>
-          </select>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-evenly",
+            padding: "1rem",
+          }}
+        >
+          <div style={{ width: "40%", marginRight: "1.5rem" }}>
+            <label style={{ display: "block", marginBottom: "5px" }}>
+              Translate to
+            </label>
+            <select
+              value={language}
+              onChange={(e) => {
+                const selectedLanguage = e.target.value;
+                setLanguage(selectedLanguage);
+              }}
+              style={{
+                backgroundColor: "rgba(41, 41, 48, 0.56)",
+                color: "white",
+                padding: "1rem",
+              }}
+            >
+              <option value="English">English</option>
+              <option value="Spanish">Spanish</option>
+              <option value="Hindi">Hindi</option>
+              <option value="Urdu">Urdu</option>
+              <option value="Persian">Persian</option>
+              <option value="Arabic">Arabic</option>
+              <option value="German">German</option>
+              <option value="French">French</option>
+              <option value="Japanese">Japanese</option>
+              <option value="Mandrin">Mandrin</option>
+              <option value="Portuguese">Portuguese</option>
+            </select>
+          </div>
+
+          <div style={{ width: "40%", marginRight: "1.5rem" }}>
+            <label style={{ display: "block", marginBottom: "5px" }}>
+              Tone of Reply
+            </label>
+            <select
+              value={category}
+              onChange={(e) => {
+                const selectedcategory = e.target.value;
+                setCategory(selectedcategory);
+              }}
+              style={{
+                backgroundColor: "rgba(41, 41, 48, 0.56)",
+                color: "white",
+                padding: "1rem",
+              }}
+            >
+              <option value="informative">Informative</option>
+              <option value="urgent">Urgent</option>
+              <option value="promotional">promotional</option>
+            </select>
+          </div>
         </div>
 
         <button
